@@ -1,0 +1,22 @@
+---
+- name: Web Sunucusu Kurulumu
+  hosts: servers  # Envanterdeki [servers] grubu
+  become: yes     # Root yetkisiyle (sudo) yap
+  
+  tasks:
+    # 1. Görev: apt update
+    - name: Paket listesini guncelle
+      apt:
+        update_cache: yes
+
+    # 2. Görev: apt install nginx
+    - name: Nginx paketini kur
+      apt:
+        name: nginx
+        state: present
+
+    # 3. Görev: Servisi başlat
+    - name: Nginx servisinin basladigindan emin ol
+      service:
+        name: nginx
+        state: started

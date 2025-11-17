@@ -1,0 +1,30 @@
+name: CI/CD - Docker Build and Push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    name: Docker İmajını İnşa Et ve Yayınla
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Adım: Kodu (ve Dockerfile'ı) indir
+      - name: Kodu indir
+        uses: actions/checkout@v4
+
+      # 2. Adım: Docker Hub'a Giriş Yap (YENİ ADIM)
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 3. Adım: Docker İmajını İnşa Et ve Etiketle (GÜNCELLENDİ)
+      - name: Build and Tag Docker Image
+        run: docker build -t rmzntlgy/devops-web-sunucum .
+
+      # 4. Adım: Docker İmajını Push'la (YENİ ADIM)
+      - name: Push Docker Image to Docker Hub
+        run: docker push rmzntlgy/devops-web-sunucum
